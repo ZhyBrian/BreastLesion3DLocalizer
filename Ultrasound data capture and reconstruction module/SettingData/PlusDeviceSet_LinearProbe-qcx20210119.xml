@@ -1,0 +1,190 @@
+<PlusConfiguration version="2.1">
+  <DataCollection StartupDelaySec="1.0">
+    <DeviceSet Name="ultrasound navigation" Description="freehand" />
+    <Device Id="VideoDevice" Type="MyFrameGrabber">
+      <DataSources>
+        <DataSource
+          Type="Video"
+          Id="USVideo"
+          FrameType="RGB"
+          FrameSize="1920 1080"
+          FrameRate="50"
+          PortUsImageOrientation="UF"
+          ClipRectangleOrigin="621 210"
+          ClipRectangleSize="525 600" />
+      </DataSources>
+      <OutputChannels>
+        <OutputChannel Id="USVideoStream" VideoDataSourceId="USVideo" />
+      </OutputChannels>
+      <video_lag>-0.13</video_lag>
+    </Device>
+    <Device Id="TrackerDevice" Type="NDITracker" ToolReferenceFrame="Tracker" SerialPort="-1">
+      <DataSources>
+        <DataSource Type="Tool" Id="Probe" RomFile="../SettingData/rom/usprobe.rom" />
+        <DataSource Type="Tool" Id="Stylus" RomFile="../SettingData/rom/GlassProbe_4Ball_3.rom" />
+        <DataSource Type="Tool" Id="Reference" RomFile="../SettingData/rom/Reference.rom" />
+        <DataSource Type="Tool" Id="Patient" RomFile="../SettingData/rom/Patient.rom" />
+        <DataSource Type="Tool" Id="Cube" RomFile="../SettingData/rom/RegistrationCube0228.rom" />
+        <DataSource Type="Tool" Id="Robot" RomFile="../SettingData/rom/Robot_Ref.rom" />
+      </DataSources>
+      <OutputChannels>
+        <OutputChannel Id="TrackerStream">
+          <DataSource Id="Probe" />
+          <DataSource Id="Stylus" />
+          <DataSource Id="Reference" />
+          <DataSource Id="Patient" />
+          <DataSource Id="Cube" />
+          <DataSource Id="Robot" />
+        </OutputChannel>
+      </OutputChannels>
+    </Device>
+    <Device Id="TrackedVideoDevice" Type="VirtualMixer">
+      <InputChannels>
+        <InputChannel Id="TrackerStream" />
+        <InputChannel Id="USVideoStream" />
+      </InputChannels>
+      <OutputChannels>
+        <OutputChannel Id="TrackedVideoStream" />
+      </OutputChannels>
+    </Device>
+  </DataCollection>
+  <CoordinateDefinitions>
+    <Transform From="Image" To="Probe"
+      Matrix="
+            0.018746 -0.028065  0.072866 16.509686
+-0.014940 -0.073942 -0.025393 -86.821383
+ 0.077682 -0.007448 -0.022467 -45.261446
+ 0.000000  0.000000  0.000000  1.000000"
+       Error="0.571604" Date="010214_115636" />
+    <Transform From="Phantom" To="Reference"
+      Matrix="
+        -0.277157	0.934487	-0.223425	79.539
+        0.0163542	-0.227913	-0.973544	-30.1504
+        -0.960685	-0.273479	0.0478849	-105.025
+        0	0	0	1"
+       Error="0.660751" Date="091112_152716" />
+    <Transform From="StylusTip" To="Stylus"
+      Matrix="
+        1	0	0	0.136
+        0	1	0	-13.486
+        0	0	1	-109.244
+        0	0	0	1"
+       Error="0.450335" Date="091112_150057" />
+    <Transform From="Patient" To="PreImage"
+      Matrix="
+        0.553562	-0.693311	0.461398	-205.647
+        0.832389	0.443039	-0.332935	-115.12
+        0.0264098	0.568363	0.822354	-134.163
+        0	0	0	1"
+       Error="0.450335" Date="210119_222600" />
+    <Transform From="ToolTip" To="RobotTCP"
+      Matrix="
+        0.0293492	0.999447	0.0156149	-41.4908
+        0.999476	-0.0291297	-0.0141005	-97.5679
+        -0.0136378	0.0160205	-0.999779	-596.494
+        -0	0	0	1"
+       Error="0.450335" Date="210119_222600" />
+  </CoordinateDefinitions>
+  <Rendering WorldCoordinateFrame="Reference" DisplayedImageOrientation="MF">
+    <DisplayableObject Type="Model" ObjectCoordinateFrame="StylusTip" Id="StylusModel" File="F:/HoloLens2_Project/HoloLens_Robot_intergration/USGuidedNavigationTPX/SettingData/Using/Stylus_Example.stl"
+      ModelToObjectTransform="
+        -1	0	0	0
+        0	1	0	0
+        0	0	-1	0
+        0	0	0	1" />
+    <DisplayableObject Type="Model" ObjectCoordinateFrame="RobotToolTip" Id="RobotToolModel" File="F:/HoloLens2_Project/HoloLens_Robot_intergration/USGuidedNavigationTPX/SettingData/Using/Robot_Tool.stl"
+      ModelToObjectTransform="
+        1	0	0	0
+        0	1	0	0
+        0	0	1	0
+        0	0	0	1" />
+    <DisplayableObject Id="PhantomModel" Type="Model" ObjectCoordinateFrame="Phantom" File="F:/HoloLens2_Project/HoloLens_Robot_intergration/USGuidedNavigationTPX/SettingData/Using/fCal_2.1.stl"
+      ModelToObjectTransform="
+        1	0	0	-33.53
+        0	-1	0	24.75
+        0	0	-1	56
+        0	0	0	1" />
+    <DisplayableObject Id="PreopeModel" Type="Model" ObjectCoordinateFrame="PreImage" File="F:/HoloLens2_Project/HoloLens_Robot_intergration/USGuidedNavigationTPX/SettingData/Using/1-s.stl"
+      ModelToObjectTransform="
+        1	0	0	0
+        0	1	0	0
+        0	0	1	0
+        0	0	0	1" />
+  </Rendering>
+  <Segmentation
+    ApproximateSpacingMmPerPixel="0.057"
+    ClipRectangleOrigin="21 65"
+    ClipRectangleSize="590 184"
+    MorphologicalOpeningCircleRadiusMm="0.17"
+    MorphologicalOpeningBarSizeMm="2.0"
+    MaxLinePairDistanceErrorPercent="10"
+    AngleToleranceDegrees="10"
+    MaxAngleDifferenceDegrees="10"
+    MinThetaDegrees="-70"
+    MaxThetaDegrees="70"
+    MaxLineShiftMm="10.0"
+    ThresholdImagePercent="10"
+    CollinearPointsMaxDistanceFromLineMm="0.6"
+    UseOriginalImageIntensityForDotIntensityScore="FALSE"
+    NumberOfMaximumFiducialPointCandidates="25" />
+  <PhantomDefinition>
+    <Description Name="fCAL" Type="Multi-N" Version="2.0" WiringVersion="2.0" Institution="Queen&apos;s University PerkLab" />
+    <Geometry>
+      <Pattern Type="NWire">
+        <Wire Name="4:G3_g3" EndPointFront="30.0 10.0 0.0" EndPointBack="30.0 10.0 40.0" />
+        <Wire Name="5:H3_k3" EndPointFront="35.0 10.0 0.0" EndPointBack="50.0 10.0 40.0" />
+        <Wire Name="6:L3_l3" EndPointFront="55.0 10.0 0.0" EndPointBack="55.0 10.0 40.0" />
+      </Pattern>
+      <Pattern Type="NWire">
+        <Wire Name="1:H5_h5" EndPointFront="35.0 20.0 0.0" EndPointBack="35.0 20.0 40.0" />
+        <Wire Name="2:K5_i5" EndPointFront="50.0 20.0 0.0" EndPointBack="40.0 20.0 40.0" />
+        <Wire Name="3:L5_l5" EndPointFront="55.0 20.0 0.0" EndPointBack="55.0 20.0 40.0" />
+      </Pattern>
+      <Landmarks>
+        <Landmark Name="#9" Position=" -3.53 -9.25 45.0" />
+        <Landmark Name="#10" Position=" 41.47 -9.25 45.0" />
+        <Landmark Name="#11" Position=" 86.47 -9.25 45.0" />
+        <Landmark Name="#12" Position=" 96.47 -9.25 30.0" />
+        <Landmark Name="#13" Position=" 86.47 -9.25 -5.0" />
+        <Landmark Name="#14" Position=" 21.47 -9.25 -5.0" />
+        <Landmark Name="#15" Position=" -3.53 -9.25 -5.0" />
+        <Landmark Name="#16" Position="-13.53 -9.25 10.0" />
+      </Landmarks>
+    </Geometry>
+  </PhantomDefinition>
+  <VolumeReconstruction
+    OutputSpacing="0.2 0.2 0.5"
+    ClipRectangleOrigin="0 0"
+    ClipRectangleSize="0 0"
+    Interpolation="LINEAR"
+    Optimization="FULL"
+    CompoundingMode="MEAN"
+    FillHoles="OFF" />
+  <fCal
+    PhantomModelId="PhantomModel"
+    ReconstructedVolumeId="Volume"
+    TransducerModelId="ProbeModel"
+    StylusModelId="StylusModel"
+    ImageDisplayableObjectId="LiveImage"
+    NumberOfCalibrationImagesToAcquire="140"
+    NumberOfValidationImagesToAcquire="70"
+    NumberOfStylusCalibrationPointsToAcquire="200"
+    RecordingIntervalMs="100"
+    MaxTimeSpentWithProcessingMs="70"
+    ImageCoordinateFrame="Image"
+    ProbeCoordinateFrame="Probe"
+    ReferenceCoordinateFrame="Reference"
+    TransducerOriginCoordinateFrame="TransducerOrigin"
+    TransducerOriginPixelCoordinateFrame="TransducerOriginPixel"
+    TemporalCalibrationDurationSec="10"
+    FixedChannelId="VideoStream"
+    FixedSourceId="Video"
+    MovingChannelId="TrackerStream"
+    MovingSourceId="ProbeToTracker"
+    DefaultSelectedChannelId="TrackedVideoStream"
+    FreeHandStartupDelaySec="3" />
+  <vtkPlusPivotCalibrationAlgo ObjectMarkerCoordinateFrame="Stylus" ReferenceCoordinateFrame="Reference" ObjectPivotPointCoordinateFrame="StylusTip" />
+  <vtkPlusPhantomLandmarkRegistrationAlgo PhantomCoordinateFrame="Phantom" ReferenceCoordinateFrame="Reference" StylusTipCoordinateFrame="StylusTip" />
+  <vtkPhantomLinearObjectRegistrationAlgo PhantomCoordinateFrame="Phantom" ReferenceCoordinateFrame="Reference" StylusTipCoordinateFrame="StylusTip" />
+  <vtkPlusProbeCalibrationAlgo ImageCoordinateFrame="Image" ProbeCoordinateFrame="Probe" PhantomCoordinateFrame="Phantom" ReferenceCoordinateFrame="Reference" />
+</PlusConfiguration>
