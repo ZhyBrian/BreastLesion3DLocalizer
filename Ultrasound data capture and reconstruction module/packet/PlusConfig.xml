@@ -1,0 +1,9 @@
+<PlusConfig
+  Date="2023.11.25 19:53:49"
+  LogLevel="3"
+  DeviceSetConfigurationDirectory="../config"
+  EditorApplicationExecutable="notepad.exe"
+  OutputDirectory="./Output"
+  ImageDirectory="../data"
+  ModelDirectory="../config"
+  ScriptsDirectory="../scripts" />
