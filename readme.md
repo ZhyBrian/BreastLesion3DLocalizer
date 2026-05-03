@@ -1,18 +1,18 @@
 We have already uploaded the **ultrasound data capture and reconstruction module**.
 
-We are still organizing and verifying the code for the ultrasound sequence segmentation & diagnosis module, as well as the 3D nipple-centric localization module, and it will be made available soon.
 
 
-
-# Full pipeline Demo
+# Full Pipeline Demo
 
 https://youtu.be/wBAuzPZo6To
 
 
 
-# HLST — Hybrid Lesion-informed Spatiotemporal Transformer
+# HLST Model
 
-Sequence-level breast ultrasound video classification (benign vs. malignant) via a dual-stream spatial encoder + Longformer-based temporal encoder.
+Hybrid Lesion-informed Spatiotemporal Transformer:
+
+- Sequence-level breast ultrasound video classification (benign vs. malignant) via a dual-stream spatial encoder + Longformer-based temporal encoder.
 
 ## Pretrained Weights
 
@@ -308,3 +308,7 @@ The global attention on the `[CLS]` token reveals which frames the model conside
   publisher={Elsevier}
 }
 ```
+
+
+
+> Note: We are still organizing and verifying the code for the ultrasound sequence segmentation & diagnosis module, as well as the 3D nipple-centric localization module, and it will be made available soon.
