@@ -112,7 +112,7 @@ The model expects input tensors in the shape `(B, C, F, H, W)` where:
 ```python
 import torch
 
-# video_tensor: (B, 3, F, 256, 256), float32, normalized to [0, 1]
+# video_tensor: (B, 3, F, H, W), float32, normalized to [0, 1]
 # position_ids: (B, F), int64, frame indices in the original sequence
 
 with torch.no_grad():
@@ -125,7 +125,7 @@ with torch.no_grad():
 **With BUS-SAM-2 lesion masks** (recommended, for HLST's tumoral guidance):
 
 ```python
-# mask_tensor: (B, 1, F, 256, 256), binary lesion mask from BUS-SAM-2
+# mask_tensor: (B, 1, F, H, W), binary lesion mask from BUS-SAM-2
 logits = model(video_tensor.to(device),
                masks=mask_tensor.to(device),
                position_ids=pos_ids.to(device))
