@@ -133,7 +133,7 @@ logits = model(video_tensor.to(device),
 
 > When `spatial_frozen=True` (inference mode), `forward()` returns only the classification logits `(B, num_classes)`.
 
-**Frame sampling for inference:** uniformly sample `F` frames from the full video sequence by taking every `D // F`-th frame (where `D` is the total number of frames):
+**Frame sampling for quicker inference:** uniformly sample `F` frames from the full video sequence by taking every `D // F`-th frame (where `D` is the total number of frames):
 
 ```python
 D = total_frames
