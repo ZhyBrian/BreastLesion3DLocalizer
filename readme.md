@@ -231,6 +231,7 @@ for epoch in range(0, n_epoch):
         pos_ids = pos_ids.to(device)
 
         pred, out_f_mask, out_f_cls = model(video, masks, pos_ids)
+        # pred, out_f_mask, out_f_cls = model(video, pos_ids)      # this is also ok when pixel-level mask label is unavailable
 
         # ... compute loss (see above) ...
         loss.backward()
