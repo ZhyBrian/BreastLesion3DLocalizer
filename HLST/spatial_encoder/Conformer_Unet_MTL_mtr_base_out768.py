@@ -510,17 +510,6 @@ class MultiConv(nn.Module):
             return x_out
         
 
-# class Down(nn.Sequential):
-#     def __init__(self, in_channels, out_channels, conv_num=2):
-#         super(Down, self).__init__()
-#         self.down = nn.MaxPool2d(2, stride=2)
-#         # self.down = nn.Conv2d(in_channels, in_channels, kernel_size=3, stride=2, padding=1)
-#         self.conv = MultiConv(in_channels, out_channels, conv_num=conv_num)
-    
-#     def forward(self, x: torch.Tensor):
-#         x = self.down(x)
-#         x = self.conv(x)
-#         return x
 
 
 class Up(nn.Module):
@@ -755,16 +744,10 @@ class MultiRegionAttention(nn.Module):
             mask_peri = mask_dil - mask_shr
             scale = int(math.sqrt(N)) / 256
             assert scale == 1 / 16 
-            
-            # _intra = mask_intra[0]
-            # _peri = mask_peri[0]
 
             mask_trans_att = combine_att_masks(mask_intra, mask_peri, self.wb_att, scale)
             assert mask_trans_att.shape[1] == self.num_heads
-            # print(mask_trans_att.shape)
             
-            # _intra_mask = mask_trans_att[0][0].unsqueeze(dim=0)
-            # _peri_mask = mask_trans_att[0][1].unsqueeze(dim=0)
 
         # qkv(): -> [batch_size, num_patches + 1, 3 * total_embed_dim]
         # reshape: -> [batch_size, num_patches + 1, 3, num_heads, embed_dim_per_head]
@@ -778,26 +761,7 @@ class MultiRegionAttention(nn.Module):
         attn = (q @ k.transpose(-2, -1)) * self.scale
         attn = attn.softmax(dim=-1)
         if mask is not None:
-            # _att_intra00 = attn[0][0].unsqueeze(dim=0) / (torch.max(attn[0][0]) + 1e-12)
-            # _att_peri00 = attn[0][1].unsqueeze(dim=0) / (torch.max(attn[0][1]) + 1e-12)
-            # _att_intra01 = attn[0][2].unsqueeze(dim=0) / (torch.max(attn[0][2]) + 1e-12)
-            # _att_peri01 = attn[0][3].unsqueeze(dim=0) / (torch.max(attn[0][3]) + 1e-12)
-            # _att_intra02 = attn[0][4].unsqueeze(dim=0) / (torch.max(attn[0][4]) + 1e-12)
-            # _att_peri02 = attn[0][5].unsqueeze(dim=0) / (torch.max(attn[0][5]) + 1e-12)
             attn = attn * mask_trans_att
-            # print(attn.shape)
-            # _att_intra10 = attn[0][0].unsqueeze(dim=0) / (torch.max(attn[0][0]) + 1e-12)
-            # _att_peri10 = attn[0][1].unsqueeze(dim=0) / (torch.max(attn[0][1]) + 1e-12)
-            # _att_intra11 = attn[0][2].unsqueeze(dim=0) / (torch.max(attn[0][2]) + 1e-12)
-            # _att_peri11 = attn[0][3].unsqueeze(dim=0) / (torch.max(attn[0][3]) + 1e-12)
-            # _att_intra12 = attn[0][4].unsqueeze(dim=0) / (torch.max(attn[0][4]) + 1e-12)
-            # _att_peri12 = attn[0][5].unsqueeze(dim=0) / (torch.max(attn[0][5]) + 1e-12)
-            # img0 = torch.stack([_intra, _peri, _intra_mask, _peri_mask], dim=0)
-            # img1 = torch.stack([_att_intra00, _att_peri00, _att_intra10, _att_peri10], dim=0)
-            # img2 = torch.stack([_att_intra01, _att_peri01, _att_intra11, _att_peri11], dim=0)
-            # img3 = torch.stack([_att_intra02, _att_peri02, _att_intra12, _att_peri12], dim=0)
-            # img = torch.cat([img0, img1, img2, img3], dim=2)
-            # save_image(img, 'mtr_mask_att.png') 
         attn = self.attn_drop(attn)
 
         # @: multiply -> [batch_size, num_heads, num_patches + 1, embed_dim_per_head]
@@ -830,60 +794,7 @@ class ConvFormer_MTL(nn.Module):
 
 
 
-# class PAM_Module(nn.Module):
-#     """ Position attention module"""
 
-#     def __init__(self, in_dim, num_heads=2, iter_num_dilate=25, iter_num_shrink=5):
-#         super(PAM_Module, self).__init__()
-#         self.chanel_in = in_dim
-#         self.num_heads = num_heads
-#         self.qk_outdim = in_dim
-#         head_dim = self.qk_outdim // num_heads
-#         self.scale = head_dim ** -0.5
-#         self.wb_att = nn.Parameter(torch.Tensor([[1.0, 0.3], [1.0, 0.3]]), requires_grad=True)
-#         self.iter_num_dilate = iter_num_dilate
-#         self.iter_num_shrink = iter_num_shrink
-
-#         self.query_conv = nn.Conv2d(in_channels=in_dim, out_channels=self.qk_outdim, kernel_size=1)
-#         self.key_conv = nn.Conv2d(in_channels=in_dim, out_channels=self.qk_outdim, kernel_size=1)
-#         self.value_conv = nn.Conv2d(in_channels=in_dim, out_channels=in_dim, kernel_size=1)
-#         self.gamma = nn.Parameter(torch.zeros(1))
-
-#         self.softmax = nn.Softmax(dim=-1)
-#     def forward(self, x, mask=None):
-#         """
-#             inputs :
-#                 x : input feature maps(B X C X H X W)
-#             returns :
-#                 out : attention value + input feature
-#                 attention: B X (HxW) X (HxW)
-#         """
-#         m_batchsize, C, height, width = x.size()
-        
-#         if mask is not None:
-#             mask_intra = mask
-#             mask_dil = mask_dilate(mask, iter=self.iter_num_dilate)
-#             mask_shr = mask_shrink(mask, iter=self.iter_num_shrink)
-#             mask_peri = mask_dil - mask_shr
-                        
-#             scale = height / 256  
-#             mask_trans_att = combine_att_masks(mask_intra, mask_peri, self.wb_att, scale)
-#             assert mask_trans_att.shape[1] == self.num_heads
-        
-#         proj_query = self.query_conv(x).view(m_batchsize, -1, width*height).permute(0, 2, 1).reshape(m_batchsize, width*height, self.num_heads, self.qk_outdim//self.num_heads).permute(0, 2, 1, 3)
-#         proj_key = self.key_conv(x).view(m_batchsize, -1, width*height).permute(0, 2, 1).reshape(m_batchsize, width*height, self.num_heads, self.qk_outdim//self.num_heads).permute(0, 2, 1, 3)
-#         energy = (proj_query @ proj_key.transpose(-2, -1)) * self.scale
-#         attention = self.softmax(energy)
-#         if mask is not None:
-#             attention = attention * mask_trans_att
-#         proj_value = self.value_conv(x).view(m_batchsize, -1, width*height).permute(0, 2, 1).reshape(m_batchsize, width*height, self.num_heads, C//self.num_heads).permute(0, 2, 1, 3)
-
-#         out = (attention @ proj_value).transpose(1, 2).reshape(m_batchsize, width*height, C).permute(0, 2, 1)
-#         out = out.view(m_batchsize, C, height, width)
-#         # scale; final proj
-
-#         out = self.gamma*out + x
-#         return out
 
 # @register_model
 def Conformer_tiny_patch16(pretrained=False, **kwargs):
@@ -903,7 +814,6 @@ def Conformer_small_patch16(pretrained=False, **kwargs):
                       num_heads=6, mlp_ratio=4, qkv_bias=True, **kwargs)
     if pretrained:
         misskeys, unexpectkeys = model.load_state_dict(torch.load(r'model_data\Conformer_small_patch16.pth'), strict=False)
-        # misskeys, unexpectkeys = model.load_state_dict(torch.load(r'model_data\Conformer_Unet_BUSI_bceiou_in256_droppath0.4_cnndroppath0.4\unet_epoch20.pth'), strict=False)
         print("misskeys: ", *misskeys, sep='\n')
         print("unexpectkeys: ", *unexpectkeys, sep='\n')
         print('successful load weight for Conformer backbone!')
@@ -935,10 +845,6 @@ if __name__ == '__main__':
     
     x = torch.randn(2, 3, 256, 256)
     mask = torch.randn(2, 1, 256, 256)
-    # net = Conformer_small_patch16(pretrained=True)
-    # # print(net)
-    # x_out_4, x_out_3, x_out_2, x_out_1, x_t = net(x)
-    # print(x_out_1.shape, x_out_2.shape, x_out_3.shape, x_out_4.shape, x_t.shape)
     net = ConvFormer_MTL()
     mask, cls = net(x, mask)
     print(mask.shape, cls.shape)
