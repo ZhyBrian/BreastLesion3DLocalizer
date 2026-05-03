@@ -256,7 +256,7 @@ trainable_params = list(model.temporal_transformer.parameters()) \
 optimizer = torch.optim.Adam(trainable_params, lr=1e-5)
 ```
 
-Note: in this mode, `forward()` returns only `logits`.
+Note: in this mode, `forward()` returns only sequence-level classification logits.
 
 ------
 
