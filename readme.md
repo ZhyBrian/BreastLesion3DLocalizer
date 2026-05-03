@@ -37,11 +37,11 @@ https://github.com/ZhyBrian/BreastLesion3DLocalizer/releases/tag/HLSTPretrainedW
 pip install torch torchvision transformers pyyaml
 ```
 
-The spatial encoder module (`spatial_encoder/`) must be available in your Python path.
+The spatial encoder module (`HLST/spatial_encoder/`) must be available in your Python path.
 
 ### Configuration
 
-All model hyperparameters are specified in `hlst.yaml`:
+All model hyperparameters are specified in `HLST/hlst.yaml`:
 
 ```yaml
 num_classes: 2
@@ -107,7 +107,7 @@ The model expects input tensors in the shape `(B, C, F, H, W)` where:
 - `B` — batch size
 - `C` — channels (3 for RGB)
 - `F` — number of sampled frames (full sequence supported; or sub-sampled for quicker inference)
-- `H, W` — spatial resolution (256 × 256)
+- `H, W` — spatial resolution
 
 ```python
 import torch
@@ -276,7 +276,7 @@ with torch.no_grad():
 
 The global attention on the `[CLS]` token reveals which frames the model considers most diagnostically significant — analogous to a sonographer's key-frame selection.
 
-## File Structure
+## File Structure in `HLST/`
 
 ```
 ├── model.py                  # HLST model definition
