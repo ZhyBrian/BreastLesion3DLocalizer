@@ -180,7 +180,7 @@ import loss.focal_loss as focal_loss
 
 loss_cls   = focal_loss.BinaryFocalLoss(alpha_neg=..., gamma=...)
 
-# Compute losses
+# Compute loss
 loss = loss_cls(pred, label)             # sequence-level focal loss
 
 loss.backward()
@@ -213,13 +213,14 @@ cfg = load_yaml("./hlst.yaml")
 cfg_dict = vars(cfg)
 cfg_dict['spatial_frozen'] = False    # enable end-to-end fine-tuning
 model = HLST(**cfg_dict).to(device)
+n_epoch = 45
 
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-    optimizer, T_max=45//3, eta_min=1e-5/1000
+    optimizer, T_max=n_epoch//3, eta_min=1e-5/1000
 )
 
-for epoch in range(1, 46):
+for epoch in range(0, n_epoch):
     model.train()
     for video, masks, label, pos_ids in train_loader:
         video  = video.to(device)
@@ -229,7 +230,7 @@ for epoch in range(1, 46):
 
         pred, out_f_mask, out_f_cls = model(video, masks, pos_ids)
 
-        # ... compute multi-task loss (see above) ...
+        # ... compute loss (see above) ...
         loss.backward()
         optimizer.step()
         optimizer.zero_grad()
