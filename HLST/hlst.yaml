@@ -1,0 +1,32 @@
+# General input/ouput info
+num_classes: 2
+spatial_frozen: True
+
+# Spatial Transformer
+spatial_args:
+  img_size: 256
+  in_chans: 3
+  attn_drop_rate: 0.0
+  drop_rate: 0.0
+  pretrained_weights: ./weights/spatial_encoder_pretrained_weights.pth
+
+# Temporal Transformer
+temporal_type: longformer
+temporal_pretrained_weights: ./weights/hlst_temporal_transformer.pth
+mlp_head_weights: ./weights/hlst_mlp_head.pth
+cls_token_weights: ./weights/hlst_cls_token.pth
+temporal_args:
+  EMBED_DIM: 768
+  MLP_DIM: 768
+  HIDDEN_DIM: 768
+  MAX_POSITION_EMBEDDINGS: 288
+  NUM_ATTENTION_HEADS: 12
+  NUM_HIDDEN_LAYERS: 3
+  ATTENTION_MODE: 'sliding_chunks'
+  PAD_TOKEN_ID: -1
+  ATTENTION_WINDOW: [18, 18, 18]
+  INTERMEDIATE_SIZE: 3072
+  ATTENTION_PROBS_DROPOUT_PROB: 0.1
+  HIDDEN_DROPOUT_PROB: 0.1
+  DROPOUT_RATE: 0.5                  # FINAL MLP
+
