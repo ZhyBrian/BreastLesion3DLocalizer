@@ -4,15 +4,15 @@
 
 *Official software and model code for our paper published in **Medical Image Analysis** (2026).*
 
-[![Paper](https://img.shields.io/badge/Paper-Medical%20Image%20Analysis%202026-b31b1b.svg)](https://www.sciencedirect.com/journal/medical-image-analysis) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) [![Python](https://img.shields.io/badge/Python-3.9-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/) [![PyTorch](https://img.shields.io/badge/PyTorch-2.6-EE4C2C.svg?logo=pytorch&logoColor=white)](https://pytorch.org/) [![3D Slicer](https://img.shields.io/badge/3D%20Slicer-Extension-e96d1f.svg)](https://www.slicer.org/) [![Demo](https://img.shields.io/badge/▶%20Demo-YouTube-FF0000.svg?logo=youtube&logoColor=white)](https://youtu.be/wBAuzPZo6To)
+[![Paper](https://img.shields.io/badge/Paper-Medical%20Image%20Analysis%202026-b31b1b.svg)](https://doi.org/10.1016/j.media.2026.103965) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) [![Python](https://img.shields.io/badge/Python-3.9-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/) [![PyTorch](https://img.shields.io/badge/PyTorch-2.6-EE4C2C.svg?logo=pytorch&logoColor=white)](https://pytorch.org/) [![3D Slicer](https://img.shields.io/badge/3D%20Slicer-Extension-e96d1f.svg)](https://www.slicer.org/) [![Demo](https://img.shields.io/badge/▶%20Demo-YouTube-FF0000.svg?logo=youtube&logoColor=white)](https://youtu.be/wBAuzPZo6To)
 
 ---
 
 ## 🎬 Full-Pipeline Demo
 
-[![Full-pipeline demonstration video](https://img.youtube.com/vi/wBAuzPZo6To/sddefault.jpg)](https://youtu.be/wBAuzPZo6To)
+[![Full-pipeline demonstration video of the navigation-guided 3D breast ultrasound system](assets/demo_cover.jpg)](https://youtu.be/wBAuzPZo6To)
 
-▶️ **[Watch the full-pipeline demonstration on YouTube](https://youtu.be/wBAuzPZo6To)** — from optically tracked freehand scanning, through real-time 3D reconstruction and nipple-centric lesion localization, to video-based malignancy diagnosis.
+▶️ **[Watch the full-pipeline demonstration on YouTube](https://youtu.be/wBAuzPZo6To).** The video walks through the complete workflow: optically tracked freehand scanning, real-time 3D reconstruction, nipple-centric lesion localization, and video-based malignancy diagnosis. *(Click the cover above to play it.)*
 
 ---
 
@@ -20,12 +20,12 @@
 
 Handheld ultrasound (HHUS) is indispensable for breast cancer screening, yet it remains compromised by operator-dependent acquisition, subjective 2D interpretation, and manual clock-face annotation. This project develops an **intelligent navigation-guided breast ultrasound scanning system** that delivers seamless **3D reconstruction**, **nipple-centric lesion localization**, and **video-based malignancy prediction**, with full adaptation to the routine clinical workflow.
 
-The system couples precise 3D spatial annotation with foundation-model-enhanced spatiotemporal characterization. At its core are two innovations: a **Hybrid Lesion-informed Spatiotemporal Transformer (HLST)** that selectively fuses intra- and peri-lesional dynamics — augmented by a prompt-driven **BUS-SAM-2** foundation model — for sequence-level classification; and a **geometry-adaptive clock projection** method that standardizes clock-face orientation and lesion-to-nipple distance for breasts of arbitrary shape, eliminating patient-attached fiducials or pre-marked landmarks.
+The system couples precise 3D spatial annotation with foundation-model-enhanced spatiotemporal characterization. At its core are two innovations: a **Hybrid Lesion-informed Spatiotemporal Transformer (HLST)** that selectively fuses intra- and peri-lesional dynamics, augmented by a prompt-driven **BUS-SAM-2** foundation model, for sequence-level classification; and a **geometry-adaptive clock projection** method that standardizes clock-face orientation and lesion-to-nipple distance for breasts of arbitrary shape, eliminating the need for patient-attached fiducials or pre-marked landmarks.
 
 > [!NOTE]
 > This repository accompanies our paper *"A navigation-guided 3D breast ultrasound scanning and reconstruction system for automated multi-lesion spatial localization and diagnosis"*, published in **Medical Image Analysis** (vol. 110, 103965, 2026).
 >
-> **Released now:** the ultrasound **data capture & reconstruction module** and the **HLST** model code (with pretrained weights). **Coming soon:** the ultrasound sequence **segmentation & diagnosis module** and the **3D nipple-centric localization module** — we are still organizing and verifying this code and it will be made available shortly.
+> **Released now:** the ultrasound **data capture & reconstruction module** and the **HLST** model code (with pretrained weights). **Coming soon:** the ultrasound sequence **segmentation & diagnosis module** and the **3D nipple-centric localization module**, which we are still organizing and verifying and will release shortly.
 
 ---
 
@@ -56,7 +56,7 @@ The end-to-end pipeline integrates four stages:
 
 ![The 3D Slicer extension and the data capture & reconstruction module](assets/software.png)
 
-The algorithms are deployed as **(a)** a **3D Slicer extension** for breast lesion characterization and localization — comprising the data capture & reconstruction module, the sequence segmentation & diagnosis module, and the 3D nipple-centric localization module — and **(b)** a standalone **ultrasound data capture & reconstruction module** providing pose-stamped recording, spatial/temporal calibration, and real-time 3D reconstruction.
+The algorithms are deployed as **(a)** a **3D Slicer extension** for breast lesion characterization and localization, comprising the data capture & reconstruction module, the sequence segmentation & diagnosis module, and the 3D nipple-centric localization module; and **(b)** a standalone **ultrasound data capture & reconstruction module** that provides pose-stamped recording, spatial and temporal calibration, and real-time 3D reconstruction.
 
 ---
 
@@ -92,7 +92,7 @@ BreastLesion3DLocalizer/
 │   ├── model.py                            # HLST model definition
 │   ├── hlst_helper.py                      # Longformer temporal model & padding utilities
 │   ├── hlst.yaml                           # Model configuration
-│   ├── spatial_encoder/                    # Dual-stream CNN–Transformer spatial encoder (ConvFormer-MTL)
+│   ├── spatial_encoder/                    # Dual-stream CNN-Transformer spatial encoder (ConvFormer-MTL)
 │   └── weights/                            # Pretrained weights (download from the GitHub release)
 ├── Ultrasound data capture and reconstruction module/   # Standalone capture & reconstruction app (released)
 │   ├── packet/                             # Executable (3dus.exe) and runtime libraries
@@ -104,9 +104,9 @@ BreastLesion3DLocalizer/
 
 ---
 
-## 🧠 HLST — Hybrid Lesion-informed Spatiotemporal Transformer
+## 🧠 HLST: Hybrid Lesion-informed Spatiotemporal Transformer
 
-Sequence-level breast ultrasound video classification (benign vs. malignant) via a **dual-stream CNN–Transformer spatial encoder** (with lesion/tumoral guidance) + a **Longformer-based temporal encoder**. The global attention on the learnable `[CLS]` token reveals which frames the model considers most diagnostically significant — analogous to a sonographer's key-frame selection.
+Sequence-level breast ultrasound video classification (benign vs. malignant) via a **dual-stream CNN-Transformer spatial encoder** (with lesion and tumoral guidance) and a **Longformer-based temporal encoder**. The global attention on the learnable `[CLS]` token reveals which frames the model considers most diagnostically significant, analogous to a sonographer's key-frame selection.
 
 ### Pretrained Weights
 
@@ -120,7 +120,7 @@ Available from the [**HLST Pretrained Weights** release](https://github.com/ZhyB
 | `hlst_cls_token.pth` | Learnable `[CLS]` token | Same natural-video pretraining |
 
 > [!IMPORTANT]
-> The temporal encoder and MLP head weights are **not** pretrained on ultrasound data, due to the lack of large-scale ultrasound video datasets. To use HLST on your own ultrasound video data, you **must** fine-tune at least the temporal encoder + MLP head (and ideally train end-to-end) on your target dataset.
+> The temporal encoder and MLP head weights are **not** pretrained on ultrasound data, due to the lack of large-scale ultrasound video datasets. To use HLST on your own ultrasound video data, you **must** fine-tune at least the temporal encoder and MLP head (and ideally train end-to-end) on your target dataset.
 
 ### Dependencies
 
@@ -178,7 +178,7 @@ model.eval()
 
 ### Inference
 
-The model expects input tensors of shape `(B, C, F, H, W)` — batch, channels (3 for RGB), sampled frames, height, width.
+The model expects input tensors of shape `(B, C, F, H, W)`, where `B` is the batch size, `C` the channels (3 for RGB), `F` the number of sampled frames, and `H`, `W` the spatial dimensions.
 
 ```python
 # video_tensor: (B, 3, F, H, W), float32, normalized to [0, 1]
@@ -202,7 +202,7 @@ logits = model(video_tensor.to(device), masks=mask_tensor.to(device), position_i
 <details>
 <summary><b>Training & fine-tuning</b> (click to expand)</summary>
 
-To fine-tune HLST on your own breast ultrasound video dataset, set `spatial_frozen: False` to enable end-to-end training with multi-task supervision. When `spatial_frozen=False`, the model returns `(logits, out_f_mask, out_f_cls)` — the sequence-level logits, per-frame segmentation, and per-frame classification — so you can design your own loss combination (the simplest supervises only the sequence-level logits with a weighted focal loss to address class imbalance).
+To fine-tune HLST on your own breast ultrasound video dataset, set `spatial_frozen: False` to enable end-to-end training with multi-task supervision. When `spatial_frozen=False`, the model returns `(logits, out_f_mask, out_f_cls)`: the sequence-level logits, per-frame segmentation, and per-frame classification. You can design your own loss combination (the simplest supervises only the sequence-level logits with a weighted focal loss to address class imbalance).
 
 #### Training configuration (reference)
 
@@ -287,7 +287,9 @@ If you find this work useful, please cite:
   volume={110},
   pages={103965},
   year={2026},
-  publisher={Elsevier}
+  publisher={Elsevier},
+  doi={10.1016/j.media.2026.103965},
+  url={https://www.sciencedirect.com/science/article/pii/S1361841526000344}
 }
 ```
 
@@ -297,9 +299,9 @@ If you find this work useful, please cite:
 
 For questions about the method or the software, please open an [issue](https://github.com/ZhyBrian/BreastLesion3DLocalizer/issues) or contact the authors:
 
-- **Yi Zhang** — Shanghai Jiao Tong University ([@ZhyBrian](https://github.com/ZhyBrian))
-- **Prof. Xiaojun Chen** (corresponding) — `xiaojunchen@sjtu.edu.cn`
-- **Prof. Tao Ying** (corresponding) — `yingtaomail@yeah.net`
+- **Yi Zhang**, Shanghai Jiao Tong University ([@ZhyBrian](https://github.com/ZhyBrian))
+- **Prof. Xiaojun Chen** (corresponding): `xiaojunchen@sjtu.edu.cn`
+- **Prof. Tao Ying** (corresponding): `yingtaomail@yeah.net`
 
 ## 🙏 Acknowledgements
 
